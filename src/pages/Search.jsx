@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import searchAlbumAPI from '../services/searchAlbumsAPI';
+// import searchAlbumAPI from '../services/searchAlbumsAPI';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
 
@@ -9,8 +9,8 @@ class Search extends Component {
     this.state = {
       searchInput: '',
       loading: false,
-      artist: '',
-      albuns: [],
+      // artist: '',
+      // albuns: [],
     };
 
     this.handleAPIs = this.handleAPIs.bind(this);
@@ -23,20 +23,20 @@ class Search extends Component {
   }
 
   async handleAPIs() {
-    const { artist } = this.state;
+    // const { artist } = this.state;
     this.setState({
       loading: true,
       searchInput: '',
     });
-    const waitAlbulnsApi = await searchAlbumAPI(artist);
+    // const waitAlbulnsApi = await searchAlbumAPI(artist);
     this.setState({
-      albuns: waitAlbulnsApi,
+      // albuns: waitAlbulnsApi,
       loading: false,
     });
   }
 
   render() {
-    const { searchInput, loading, artist, albuns } = this.state;
+    const { searchInput, loading } = this.state;
     const minLength = 2;
     return (
       <div data-testid="page-search">
@@ -61,9 +61,6 @@ class Search extends Component {
 
               </div>
             )}
-        </div>
-        <div>
-          
         </div>
       </div>
     );

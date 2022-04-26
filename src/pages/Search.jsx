@@ -17,10 +17,6 @@ class Search extends Component {
     this.handleAPIs = this.handleAPIs.bind(this);
   }
 
-  componentDidMount() {
-    this.handleAPIs();
-  }
-
   handleChange(value) {
     this.setState({
       searchInput: value,

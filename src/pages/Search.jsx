@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-// import searchAlbumAPI from '../services/searchAlbumsAPI';
+import searchAlbumAPI from '../services/searchAlbumsAPI';
 import Header from '../components/Header';
 import Loading from '../components/Loading';
+import AlbumCard from '../components/AlbumCard';
 
 class Search extends Component {
   constructor(props) {
@@ -9,11 +10,15 @@ class Search extends Component {
     this.state = {
       searchInput: '',
       loading: false,
-      // artist: '',
-      // albuns: [],
+      artistNameSearch: '',
+      searchList: [],
     };
 
     this.handleAPIs = this.handleAPIs.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleAPIs();
   }
 
   handleChange(value) {
@@ -23,20 +28,22 @@ class Search extends Component {
   }
 
   async handleAPIs() {
-    // const { artist } = this.state;
     this.setState({
       loading: true,
-      searchInput: '',
     });
-    // const waitAlbulnsApi = await searchAlbumAPI(artist);
+    const { searchInput } = this.state;
+    const albunsApi = await searchAlbumAPI(searchInput);
     this.setState({
-      // albuns: waitAlbulnsApi,
       loading: false,
+      searchInput: '',
+      searchList: albunsApi,
+      artistNameSearch: searchInput,
     });
+    // console.log(albunsApi);
   }
 
   render() {
-    const { searchInput, loading } = this.state;
+    const { searchInput, loading, artistNameSearch, searchList } = this.state;
     const minLength = 2;
     return (
       <div data-testid="page-search">
@@ -51,14 +58,34 @@ class Search extends Component {
                   value={ searchInput }
                   onChange={ (e) => this.handleChange(e.target.value) }
                 />
-                <input
-                  type="button"
+                <button
+                  type="submit"
                   data-testid="search-artist-button"
-                  value="Pesquisar"
                   disabled={ searchInput.length < minLength }
                   onClick={ this.handleAPIs }
-                />
-
+                >
+                  Pesquisar
+                </button>
+                {
+                  searchList.length > 0
+                    ? (
+                      <div>
+                        <p>{`Resultado de álbuns de: ${artistNameSearch}`}</p>
+                        {searchList.map((obj) => (
+                          <AlbumCard
+                            key={ obj.collectionId }
+                            artistName={ obj.artistName }
+                            collectionId={ obj.collectionId }
+                            collectionName={ obj.collectionName }
+                            collectionPrice={ obj.collectionPrice }
+                            artworkUrl100={ obj.artworkUrl100 }
+                            releaseDate={ obj.releaseDate }
+                          />
+                        ))}
+                      </div>
+                    )
+                    : <p>Nenhum álbum foi encontrado</p>
+                }
               </div>
             )}
         </div>

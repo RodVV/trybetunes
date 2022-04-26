@@ -26,6 +26,7 @@ class Login extends Component {
     this.setState({ loading: true });
     await createUser({ name: userNameInput });
     history.push('/search');
+    this.setState({ loading: false });
     // https://v5.reactrouter.com/web/api/Hooks
   }
 
@@ -33,25 +34,29 @@ class Login extends Component {
     const { userNameInput, loading } = this.state;
     const minLength = 3;
     return (
-      <div data-testid="page-login">
-        <label htmlFor="login-input">
-          <input
-            type="text"
-            data-testid="login-name-input"
-            value={ userNameInput }
-            onChange={ (e) => this.handleChange(e.target.value) }
-          />
-        </label>
-        <label htmlFor="login-button">
-          <input
-            type="button"
-            data-testid="login-submit-button"
-            value="Entrar"
-            disabled={ userNameInput.length < minLength }
-            onClick={ this.loginButtonClick }
-          />
-        </label>
-        {loading && <Loading />}
+      <div>
+        {loading ? <Loading />
+          : (
+            <div data-testid="page-login">
+              <label htmlFor="login-input">
+                <input
+                  type="text"
+                  data-testid="login-name-input"
+                  value={ userNameInput }
+                  onChange={ (e) => this.handleChange(e.target.value) }
+                />
+              </label>
+              <label htmlFor="login-button">
+                <input
+                  type="button"
+                  data-testid="login-submit-button"
+                  value="Entrar"
+                  disabled={ userNameInput.length < minLength }
+                  onClick={ this.loginButtonClick }
+                />
+              </label>
+            </div>
+          )}
       </div>
     );
   }

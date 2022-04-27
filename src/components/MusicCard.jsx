@@ -1,30 +1,92 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-// import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import { addSong, removeSong } from '../services/favoriteSongsAPI';
+import Loading from './Loading';
 
 class MusicCard extends Component {
+  constructor() {
+    super();
+    this.state = {
+      loading: false,
+      checked: false,
+    };
+
+    this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount() {
+    // const { checked } = this.props;
+    // this.setState({
+    //   checked,
+    // });
+    // const { favMusic, songs } = this.props;
+    // const checkedFavMusic = favMusic.some(
+    //   (checkedMusic) => checkedMusic.trackId === songs.trackId,
+    // );
+    // if (checkedFavMusic === true) {
+    //   this.setState({
+    //     checked: true,
+    //   });
+    // }
+  }
+
+  async handleChange({ target }) {
+    const { checked } = target;
+    const { songs } = this.props;
+    if (checked === true) {
+      this.setState({
+        loading: true,
+        checked,
+      });
+      await addSong(songs);
+      console.log(addSong);
+      this.setState({
+        loading: false,
+      });
+    } else {
+      this.setState({
+        loading: true,
+      });
+      await removeSong(songs);
+      console.log(removeSong);
+      this.setState({
+        loading: false,
+        checked,
+      });
+    }
+  }
+
   render() {
     const { trackId, trackName, previewUrl } = this.props;
+    const { checked, loading } = this.state;
     return (
       <li>
-        <p>
-          { trackName }
-        </p>
-        <audio data-testid="audio-component" src={ previewUrl } controls>
-          <track kind="captions" />
-          O seu navegador não suporta o elemento
-          {' '}
-          <code>audio</code>
-          .
-        </audio>
+        {loading ? <Loading />
+          : (
+            <>
+              <p>
+                {trackName}
+              </p>
+              <audio data-testid="audio-component" src={ previewUrl } controls>
+                <track kind="captions" />
+                O seu navegador não suporta o elemento
+                {' '}
+                <code>audio</code>
+                .
+              </audio>
+              <label htmlFor="Favorita">
+                <input
+                  type="checkbox"
+                  data-testid={ `checkbox-music-${trackId}` }
+                  checked={ checked }
+                  onChange={ this.handleChange }
+                />
+                Favorita
+              </label>
 
-        <label htmlFor="Favorita">
-          <input
-            type="checkbox"
-            data-testid={ `checkbox-music-${trackId}` }
-          />
-          Favorita
-        </label>
+            </>
+          )}
+
       </li>
     );
   }

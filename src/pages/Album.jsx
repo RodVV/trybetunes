@@ -24,19 +24,19 @@ class Album extends Component {
     const favMusic = await getFavoriteSongs();
     this.setState({
       loading: true,
-      favMusic,
     });
     const { match: { params: { id } } } = this.props;
     const getMusicApi = await getMusics(id);
     this.setState({
-      loading: false,
       artistName: getMusicApi[0].artistName,
       artworkUrl100: getMusicApi[0].artworkUrl100,
       collectionName: getMusicApi[0].collectionName,
     });
     const arrayMusic = getMusicApi.filter((music) => music.kind === 'song');
     this.setState({
+      loading: false,
       musicList: arrayMusic,
+      favMusic,
     });
   }
 
@@ -70,7 +70,8 @@ class Album extends Component {
                     previewUrl={ obj.previewUrl }
                     trackId={ obj.trackId }
                     fullMusic={ obj }
-                    favMusic={ favMusic }
+                    checked={ favMusic.some((element) => (
+                      element.trackName === music.trackName)) }
                   />
                 ))}
               </ul>

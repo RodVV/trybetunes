@@ -14,22 +14,6 @@ class MusicCard extends Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  componentDidMount() {
-    // const { checked } = this.props;
-    // this.setState({
-    //   checked,
-    // });
-    // const { favMusic, songs } = this.props;
-    // const checkedFavMusic = favMusic.some(
-    //   (checkedMusic) => checkedMusic.trackId === songs.trackId,
-    // );
-    // if (checkedFavMusic === true) {
-    //   this.setState({
-    //     checked: true,
-    //   });
-    // }
-  }
-
   async handleChange({ target }) {
     const { checked } = target;
     const { songs } = this.props;
